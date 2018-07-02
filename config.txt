@@ -1,0 +1,50 @@
+####
+##
+##
+##
+##      사용법
+##              - OS가 윈도우일 경우 DroughtSystem.exe 실행
+##              - OS가 리눅스일 경우 DroughtSystem.jar 실행
+##
+##
+####
+
+###################################
+#
+#       Database Config
+#
+#               Database Type
+#                       - o : Oracle
+#                       - t : Tibero
+#                       - p : Postgresql
+#
+###################################
+db.type=p
+db.url=jdbc:postgresql://192.168.0.151:5433/drght_clt
+db.user=drght_clt
+db.password=drght_clt00
+db.max_conn=5
+db.init_conn=1
+db.wait_time=5000
+
+
+##################################
+#
+#       Log Config
+#
+#               Log Level
+#                       - info
+#                       - debug
+#                       - error
+#
+##################################
+log.file=/home/drght/java/log.txt
+log.level=debug
+
+##################################
+#
+#       Web Config
+                max_time : 최대 커넥션 타임아웃(밀리세컨드 기준)
+#
+##################################
+web.max_time=1800000
