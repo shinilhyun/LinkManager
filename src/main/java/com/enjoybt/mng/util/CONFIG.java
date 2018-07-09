@@ -44,7 +44,7 @@ public class CONFIG {
 				String line;
 				
 				while((line = br.readLine()) != null) {
-					if(StringUtils.isEmpty(line) || "#".equals(line.substring(0, 1))) {
+					if(StringUtils.isEmpty(line.trim()) || "#".equals(line.substring(0, 1))) {
 						continue;
 					}
 					lineConfig(line);

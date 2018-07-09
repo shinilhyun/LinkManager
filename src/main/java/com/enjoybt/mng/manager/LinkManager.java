@@ -54,12 +54,13 @@ public class LinkManager {
 		PreparedStatement pstmt= null;
 		String result = "";
 		Date edt = null;
+		
 		try{
+			pstmt = conn.prepareStatement("INSERT INTO TBL_LINK_LOG (LINK_SN, RSLT_VAL, RSLT_MSG, REGIST_DT, START_DT, END_DT, LONG_TIME) VALUES (?, ?, ?, NOW(), ?, ?, ?)");
+			pstmt.setInt(1, linkSn);
 			result = WebUtil.getResponseText(linkUrl, webMaxConnectionTime, "GET", "UTF-8", null, null);
 			edt = new Date();
 //			output.put("result", result);
-			pstmt = conn.prepareStatement("INSERT INTO TBL_LINK_LOG (LINK_SN, RSLT_VAL, RSLT_MSG, REGIST_DT, START_DT, END_DT, LONG_TIME) VALUES (?, ?, ?, NOW(), ?, ?, ?)");
-			pstmt.setInt(1, linkSn);
 			if(!StringUtils.isEmpty(result)) {
 				JSONObject resultJson = new JSONObject(result);
 				String val = resultJson.getString("RESULT");
@@ -86,6 +87,16 @@ public class LinkManager {
 			output.put("Error", exportErrorMessage(e));
 			output.put("result", result);
 			edt = new Date();
+			try {
+				pstmt.setString(2, "N");
+				pstmt.setString(3, result + System.lineSeparator() + exportErrorMessage(e));
+				pstmt.setTimestamp(4, new Timestamp(sdt.getTime()));
+				pstmt.setTimestamp(5, new Timestamp(edt.getTime()));
+				pstmt.setLong(6, edt.getTime() - sdt.getTime());
+				pstmt.execute();
+			} catch (SQLException e1) {
+				output.put("Error", exportErrorMessage(e));
+			}
 		}finally {
 			try{if(pstmt != null) pstmt.close();}catch(SQLException e){LOG.error("PSTMT Close Error", e);}
 			dbPool.freeConnection(dbType, conn);
